@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  
+  
+  
+  <entry>
+    <title>hexo+gitee搭建博客</title>
+    <link href="/2024/01/14/hexo-gitee%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/"/>
+    <url>/2024/01/14/hexo-gitee%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Welcome To 533dad&#39;s Blog</title>
+    <link href="/2022/11/18/Welcome-To-533dad-s-Blog/"/>
+    <url>/2022/11/18/Welcome-To-533dad-s-Blog/</url>
+    
+    <content type="html"><![CDATA[]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Linux Study Diary</title>
+    <link href="/2022/11/18/Linux-Study-Diary/"/>
+    <url>/2022/11/18/Linux-Study-Diary/</url>
+    
+    <content type="html"><![CDATA[<p><strong>Linux发行版</strong> </p><ul><li>流行的 Linux 发行版包括<span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvRGViaWFu">Debian</span>、<span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvRmVkb3JhX0xpbnV4">Fedora Linux</span>和<span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvVWJ1bnR1">Ubuntu</span>，它们本身有许多不同的发行版和修改版本，包括<span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvTHVidW50dQ==">Lubuntu</span>和<span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvWHVidW50dQ==">Xubuntu</span>。</li><li>商业发行版包括<span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvUmVkX0hhdF9FbnRlcnByaXNlX0xpbnV4">Red Hat Enterprise Linux</span>和<span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvU1VTRV9MaW51eF9FbnRlcnByaXNl">SUSE Linux Enterprise</span>。</li><li>桌面 Linux 发行版包括一个<span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvV2luZG93aW5nX3N5c3RlbQ==">窗口系统</span>，例如<span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvWDEx">X11</span>或<span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvV2F5bGFuZF8oZGlzcGxheV9zZXJ2ZXJfcHJvdG9jb2wp">Wayland</span>，以及一个<span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvRGVza3RvcF9lbnZpcm9ubWVudA==">桌面环境</span>，例如<span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvR05PTUU=">GNOME</span>或<span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvS0RFX1BsYXNtYV81">KDE Plasma</span>。用于<span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvU2VydmVyXyhjb21wdXRpbmcp">服务器的发行版</span>可能会完全省略<span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvQ29tcHV0ZXJfZ3JhcGhpY3M=">图形</span>，或包含<span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvU29sdXRpb25fc3RhY2s=">解决方案堆栈</span>，例如<span class="exturl" data-url="aHR0cHM6Ly9lbi53aWtpcGVkaWEub3JnL3dpa2kvTEFNUF8oc29mdHdhcmVfYnVuZGxlKQ==">LAMP</span>。因为 Linux 是可自由再分发的，所以任何人都可以出于任何目的创建一个分发版。</li></ul><hr><p><strong>Linux优点</strong>–<em>为什么绝大多数服务器部署在Linux上，而不是其他操作系统</em></p><p><em><strong>1.开源</strong></em> </p><p>Linux Server 相较 Windows Server 领先的首要原因是完全免费且可用作开源用途。通过开源方式，您可以轻松查看用于创建 Linux 内核的代码，也可以对代码进行修改和再创作。通过许多编程接口，您甚至可以开发自己的程序并将其添加到 Linux 操作系统中。还可以对 Linux Server 操作系统进行自定义，以满足使用要求，这是 Windows 无法实现的。</p><p><em><strong>2.稳定性</strong></em><br>Linux 系统一直以其稳定性而闻名，它们可以连续运行多年而不发生任何重大问题。事实上，很多 Linux 用户都从未在自己的环境中遇到过系统崩溃的情况。相对 Windows 而言，挂起和崩溃完全是一种常态。</p><p>尽管 Windows 也可以很好地执行多任务处理，但 Linux 可以在处理各种任务的同时，仍能提供坚如磐石的性能。</p><p>当将 Linux 与 Windows 进行对比时，对每项系统配置的更改都需要重启 Windows Server，而 Linux 更改大多数配置时都无需重启服务器即可生效，这也确保了 Linux 服务器最短的停机时间。</p><p><em><strong>3.安全</strong></em><br>Linux 由最初的多用户操作系统开发的 UNIX 操作系统发展而来，在安全方面显然比 Windows 更强。与 Windows 作为病毒和恶意软件攻击的首要目标不同，Linux Server 只有管理员或特定用户才有权访问 Linux 内核，而且 Linux 服务器（相较 Windows 而言）不会经常受到攻击，并且被发现的任何漏洞都会在第一时间由大批 Linux 开发人员修复。</p><p><em><strong>4.硬件</strong></em><br>当将 Linux Server 与 Windows Server 在硬件方面进行比较时，Windows 需要经常对硬件进行升级以满足各方面性能需求。而 Linux 对硬件的需求则很低，也不需要频繁对硬件进行升级更新，并且无论系统架构或处理器如何，都能表现得非常出色。</p><p><em><strong>5.灵活性</strong></em><br>Linux 是世界上最灵活的操作系统，没有之一，您可以根据需要自定义系统。使用 Linux，您可以随心所欲地安装 GUI 界面或仅使用「终端」管理服务器；使用 Linux，您可以选择各种工具和实用程序来管理所有与服务器相关的活动，如：添加用户、管理服务和网络，安装新应用程序以及监控性能等。</p><p>而 Shell 是 Linux 系统中最强大的组件，允许您运行各种程序并允许与内核进行交互。 总的来说，Linux 为您提供了对服务器的完全控制、掌控权利。</p><p><em><strong>6.总体拥有成本（TCO）和维护</strong></em><br>在总体拥有成本方面，由于 Linux 在使用上属于完全免费。即便您购买了针对企业或组织的 Linux 发行版，也会比 Windows 或其他许可软件花费更少。</p><p><em><strong>7.自由</strong></em><br>对 Linux 而言，您不会被商业供应商强加产品和服务，用户可以自由选择适合需求的产品。正是这种自由使得像 Amazon 和 Google 这样的大公司选择了基于 Linux 的服务器来提供服务。</p><p><em><strong>8.访问开源应用程序</strong></em><br>Linux 为开源应用程序开辟了一个新的世界，有数以千计的开源应用程序正在等待用户探索，您甚至可以使用特殊界面在 Linux 服务器上运行 Windows 应用程序。</p><p><em><strong>9.易于变更</strong></em><br>与 Windows Servers 不同，您可以轻松对 Linux Server 进行变更，并且无需重启服务器。对于 Windows Server 而言，要使用微软发布的新功能就得购买下一个版本。</p><p><em><strong>10.社区支持</strong></em><br>Linux 社区在全球都十分活跃和使用广泛，总有数千名志愿者在线活动以解决其他Linux 用户的问题，所以几乎在任何 Linux 论坛上发布的任何问题都会得到即时响应。而选择使用 Linux Enterprise 版本时，还会附有付费支持选项。</p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="/2022/11/18/hello-world/"/>
+    <url>/2022/11/18/hello-world/</url>
+    
+    <content type="html"><![CDATA[<p>Welcome to <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlvLw==">Hexo</span>! This is your very first post. Check <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlvL2RvY3Mv">documentation</span> for more info. If you get any problems when using Hexo, you can find the answer in <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlvL2RvY3MvdHJvdWJsZXNob290aW5nLmh0bWw=">troubleshooting</span> or you can ask me on <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2hleG9qcy9oZXhvL2lzc3Vlcw==">GitHub</span>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlvL2RvY3Mvd3JpdGluZy5odG1s">Writing</span></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlvL2RvY3Mvc2VydmVyLmh0bWw=">Server</span></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlvL2RvY3MvZ2VuZXJhdGluZy5odG1s">Generating</span></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlvL2RvY3Mvb25lLWNvbW1hbmQtZGVwbG95bWVudC5odG1s">Deployment</span></p>]]></content>
+    
+    
+    
+  </entry>
+  
+  
+  
+  
+</search>
