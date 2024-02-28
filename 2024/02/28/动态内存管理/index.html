@@ -1,0 +1,796 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="SSSSSia">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="动态内存分配、动态内存函数、柔性数组">
+<meta property="og:type" content="article">
+<meta property="og:title" content="动态内存管理">
+<meta property="og:url" content="http://example.com/2024/02/28/%E5%8A%A8%E6%80%81%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="SSSSSia">
+<meta property="og:description" content="动态内存分配、动态内存函数、柔性数组">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/index_img9.jpg">
+<meta property="article:published_time" content="2024-02-28T14:11:19.000Z">
+<meta property="article:modified_time" content="2024-02-28T14:16:03.791Z">
+<meta property="article:author" content="SSSSSia">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="动态内存">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/index_img9.jpg">
+  
+  
+  
+  <title>动态内存管理 - SSSSSia</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"KbBA0OepAHi9AzJfVnEVXTWV-gzGzoHsz","app_key":"gm95QX5JO6oIGCpRa0tCx9SN","server_url":"https://kbba0oep.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 95vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>SSSSSia</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                主页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner_img14.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="动态内存管理"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-02-28 22:11" pubdate>
+          February 28, 2024 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6.7k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          57 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> views
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+        <div class="scroll-down-bar">
+          <i class="iconfont icon-arrowdown"></i>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">动态内存管理</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="动态内存管理"><a href="#动态内存管理" class="headerlink" title="动态内存管理"></a>动态内存管理</h1><h2 id="本章重点"><a href="#本章重点" class="headerlink" title="本章重点"></a>本章重点</h2><ul>
+<li>为什么存在动态内存分配</li>
+<li>动态内存函数的介绍<ul>
+<li>malloc</li>
+<li>free</li>
+<li>calloc</li>
+<li>realloc</li>
+</ul>
+</li>
+<li>常见的动态内存错误</li>
+<li>经典笔试题</li>
+<li>柔性数组</li>
+</ul>
+<hr>
+<p><em>内存存储空间</em></p>
+<table>
+<thead>
+<tr>
+<th align="center">栈区</th>
+<th align="center">堆区</th>
+<th align="center">静态区</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">局部变量、形式参数、函数返回值</td>
+<td align="center">动态内存分配：malloc、free、calloc、realloc</td>
+<td align="center">静态变量、全局变量</td>
+</tr>
+</tbody></table>
+<p><strong>每一次函数的调用都会在栈区申请内存空间</strong></p>
+<p><strong>静态变量和全局变量默认初始化值为0</strong></p>
+<p><strong>局部变量默认初始化值为随机值</strong></p>
+<hr>
+<h2 id="1-为什么存在动态内存分配"><a href="#1-为什么存在动态内存分配" class="headerlink" title="1.为什么存在动态内存分配"></a>1.为什么存在动态内存分配</h2><p>我们已经掌握的内存开辟方式有：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> val = <span class="hljs-number">20</span>; <span class="hljs-comment">//在栈空间上开辟四个字节</span><br><span class="hljs-type">char</span> arr[<span class="hljs-number">10</span>] = &#123;<span class="hljs-number">0</span>&#125;; <span class="hljs-comment">//在栈空间上开辟10个字节的连续空间</span><br></code></pre></td></tr></table></figure>
+
+<p>但是上述的开辟空间的方式有两个特点：</p>
+<p>​	1.空间开辟大小是固定的。</p>
+<p>​	2.数组在申明的时候，必须指定数组的长度，她所需要的内存在编译时分配。</p>
+<p>但是对于空间的需求，不仅仅时上述的情况。有时候我们需要的空间大小在程序运行的时候才能知道，</p>
+<p>那数组的编译时开辟空间的方式就不能满足了。</p>
+<p>这时候就只能试试动态内存开辟了。</p>
+<h2 id="2-动态内存函数的介绍"><a href="#2-动态内存函数的介绍" class="headerlink" title="2.动态内存函数的介绍"></a>2.动态内存函数的介绍</h2><h3 id="2-1-malloc和free"><a href="#2-1-malloc和free" class="headerlink" title="2.1 malloc和free"></a>2.1 malloc和free</h3><p>C语言提供了一个动态内存开辟的函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span>* <span class="hljs-title function_">malloc</span><span class="hljs-params">( <span class="hljs-type">size_t</span> size)</span>;<br></code></pre></td></tr></table></figure>
+
+<p>这个函数向内存申请一块<strong>连续可用</strong>的空间，并返回指向这块空间的指针。</p>
+<ul>
+<li>如果开辟成功，则返回一个指向开辟好空间的指针。</li>
+<li>如果开辟失败，则返回一个NULL指针，因此malloc的返回值一定要做检查。</li>
+<li>返回值的类型是<code>void*</code>，所以malloc函数并不知道开辟空间的类型，具体在使用的时候使用者自己来决定。</li>
+<li>如果参数<code>size</code>为0，malloc的行为是标准未定义的，取决于编译器。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;errno.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-type">int</span> arr[<span class="hljs-number">10</span>] = &#123;<span class="hljs-number">0</span>&#125;;<br>    <span class="hljs-comment">//动态内存开辟</span><br>    <span class="hljs-type">int</span>* p = (<span class="hljs-type">int</span>*)<span class="hljs-built_in">malloc</span>(<span class="hljs-number">40</span>);<br>    <span class="hljs-keyword">if</span>(p == <span class="hljs-literal">NULL</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>,strerror(errno));<br>        retrun <span class="hljs-number">1</span>;<br>    &#125;<br>    <span class="hljs-type">int</span> i =<span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">10</span>,i++)<br>    &#123;<br>		*(p+i) = i;<br>    &#125;<br>    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">10</span>,i++)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d &quot;</span>,*(p+i));<br>    &#125;<br>    <br>    <span class="hljs-comment">//没有free</span><br>    <span class="hljs-comment">//并不是说内存空间就不回收了</span><br>    <span class="hljs-comment">//当程序退出的时候，系统会自动回收内存空间</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>C语言提供了另外一个函数free，专门用来做动态内存的释放和回收的，函数原型如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">free</span><span class="hljs-params">(<span class="hljs-type">void</span> * ptr)</span>;<br></code></pre></td></tr></table></figure>
+
+<p>free函数用来释放动态开辟的内存。</p>
+<ul>
+<li>如果参数<code>ptr</code>指向的空间不是动态开辟的，那free函数的行为是未定义的。</li>
+<li>如果参数<code>ptr</code>是NULL指针，则函数什么事都不做。</li>
+</ul>
+<p>malloc和free都声明在<code>stdlib.h</code>头文件中。</p>
+<p>例：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;errno.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-type">int</span> arr[<span class="hljs-number">10</span>] = &#123;<span class="hljs-number">0</span>&#125;;<br>    <span class="hljs-comment">//动态内存开辟</span><br>    <span class="hljs-type">int</span>* p = (<span class="hljs-type">int</span>*)<span class="hljs-built_in">malloc</span>(<span class="hljs-number">40</span>);<br>    <span class="hljs-keyword">if</span>(p == <span class="hljs-literal">NULL</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>,strerror(errno));<br>        retrun <span class="hljs-number">1</span>;<br>    &#125;<br>    <span class="hljs-type">int</span> i =<span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">10</span>,i++)<br>    &#123;<br>		*(p+i) = i;<br>    &#125;<br>    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">10</span>,i++)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d &quot;</span>,*(p+i));<br>    &#125;<br>    <br>	<span class="hljs-built_in">free</span>(p);<br>    <span class="hljs-comment">//p指向的内存空间无实际数值，同时需要释放指针p，避免称为野指针</span><br>    p = <span class="hljs-literal">NULL</span>;<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-2-calloc"><a href="#2-2-calloc" class="headerlink" title="2.2 calloc"></a>2.2 calloc</h3><p>C语言还提供了一个函数叫<code>calloc</code>，<code>calloc</code>函数也用来动态内存分配。原型如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span>* <span class="hljs-title function_">calloc</span> <span class="hljs-params">(<span class="hljs-type">size_t</span> num,<span class="hljs-type">size_t</span> size)</span>;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>函数的功能是为<code>num</code>个大小为<code>size</code>的元素开辟一块空间，并且把空间的每个字节初始化为0。</li>
+<li>与函数<code>malloc</code>的区别只在于<code>calloc</code>会在返回地址之前把申请的空间的每个字节初始化为全0.</li>
+</ul>
+<p>例：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;errno.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span><br>&#123;<br>    <br>    <span class="hljs-type">int</span> *p = (<span class="hljs-type">int</span>*)<span class="hljs-built_in">calloc</span>(<span class="hljs-number">10</span>,<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>));<br>    <span class="hljs-keyword">if</span>(p == <span class="hljs-literal">NULL</span>)<br>    &#123;<br>    	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>,strerror(errno));<br>    &#125;<span class="hljs-keyword">else</span><br>    &#123;<br>        <span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">10</span>;i++)<br>        &#123;<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d &quot;</span>,*(p+i));<br>            <span class="hljs-comment">//0 0 0 0 0 0 0 0 0 0</span><br>        &#125;<br>    &#125;<br>    <span class="hljs-built_in">free</span>(p);<br>    p=<span class="hljs-literal">NULL</span>;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-3-realloc"><a href="#2-3-realloc" class="headerlink" title="2.3 realloc"></a>2.3 realloc</h2><ul>
+<li>realloc函数的出现让动态内存管理更加灵活。</li>
+<li>有时我们会发现过去申请的空间太小了，有时侯我们又会觉得申请的空间过大了，那为了合理地使用内存，我们会对内存地大小做灵活的调整。那<code>realloc</code>函数就可以做到对动态开辟内存大小的调整。</li>
+</ul>
+<p>函数原型如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span>* <span class="hljs-title function_">realloc</span><span class="hljs-params">(<span class="hljs-type">void</span>* ptr,<span class="hljs-type">size_t</span> size)</span>;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>ptr</code>是要调整的地址</li>
+<li><code>size</code>是调整之后的大小</li>
+<li>返回值为调整之后的内存起始位置</li>
+<li>这个函数调整原内存空间大小的基础上，还会将原来内存中的数据移动到<code>新</code>的空间</li>
+<li>realloc在调整内存空间时存在两种情况：<ol>
+<li>情况1：原有空间之后有足够大的空间（直接在后面追加空间）</li>
+<li>情况2：原有空间之后没有足够大的空间（另找一块空间，并把原来内存中的数据移动到<code>新</code>的空间）</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;errno.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span><br>&#123;<br>	<span class="hljs-type">int</span> *p = (<span class="hljs-type">int</span>*)<span class="hljs-built_in">malloc</span>(<span class="hljs-number">40</span>);<br>    <span class="hljs-comment">//int *p = (int*)realloc(NULL,40);</span><br>    <span class="hljs-keyword">if</span>(p==<span class="hljs-literal">NULL</span>)<br>    &#123;<br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>,strerrpr(errno));<br>    &#125;<br>    <span class="hljs-comment">//使用</span><br>    <span class="hljs-comment">//1 2 3 4 5 6 7 8 9 10</span><br>    <span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">10</span>;i++)<br>    &#123;<br>		*(p+i) = i+<span class="hljs-number">1</span>;<br>    &#125;<br>    <span class="hljs-comment">//扩容</span><br>    <span class="hljs-type">int</span> *ptr = (<span class="hljs-type">int</span>*)<span class="hljs-built_in">realloc</span>(p,<span class="hljs-number">80</span>);<br>    <span class="hljs-comment">//可能分配失败</span><br>    <span class="hljs-keyword">if</span>(ptr != <span class="hljs-literal">NULL</span>)&#123;<br>        p=ptr;<br>    &#125;<br>    <span class="hljs-comment">//使用</span><br>    <span class="hljs-comment">//1 2 3 4 5 6 7 8 9 10</span><br>    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">10</span>;i++)<br>    &#123;<br>		*(p+i) = i+<span class="hljs-number">1</span>;<br>    &#125;<br>    <span class="hljs-built_in">free</span>(p);<br>    p = <span class="hljs-literal">NULL</span>;<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>    <br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-常见的动态内存错误"><a href="#3-常见的动态内存错误" class="headerlink" title="3. 常见的动态内存错误"></a>3. 常见的动态内存错误</h2><h3 id="3-1-对NULL指针的解引用操作"><a href="#3-1-对NULL指针的解引用操作" class="headerlink" title="3.1 对NULL指针的解引用操作"></a>3.1 对NULL指针的解引用操作</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">test</span><span class="hljs-params">()</span><br>&#123;<br>	<span class="hljs-type">int</span> *p = (<span class="hljs-type">int</span> *)<span class="hljs-built_in">malloc</span>(INT_MAX/<span class="hljs-number">4</span>);<br>    <span class="hljs-comment">//!!!解引用前需要判断返回值</span><br>    *p = <span class="hljs-number">20</span>;<span class="hljs-comment">//如果p的值是NULL，就会有问题</span><br>    <span class="hljs-built_in">free</span>(p);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-2-对动态开辟空间的越界访问"><a href="#3-2-对动态开辟空间的越界访问" class="headerlink" title="3.2 对动态开辟空间的越界访问"></a>3.2 对动态开辟空间的越界访问</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">test</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-type">int</span> *p = (<span class="hljs-type">int</span>*)<span class="hljs-built_in">malloc</span>(<span class="hljs-number">10</span>*<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>));<br>    <span class="hljs-keyword">if</span>(p==<span class="hljs-literal">NULL</span>)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>,strerror(errno));<br>    	<span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>    &#125;<br>    <br>    <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;=<span class="hljs-number">10</span>;i++)&#123;<br>        p[i] = i;<br>    &#125;<br>    <span class="hljs-built_in">free</span>(p);<br>	p = <span class="hljs-literal">NULL</span>;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-3-对非动态开辟内存使用free释放"><a href="#3-3-对非动态开辟内存使用free释放" class="headerlink" title="3.3 对非动态开辟内存使用free释放"></a>3.3 对非动态开辟内存使用free释放</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">test</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-type">int</span> a = <span class="hljs-number">10</span>;<br>    <span class="hljs-type">int</span> *p = &amp;a;<br>    <span class="hljs-comment">//...</span><br>    <span class="hljs-built_in">free</span>(p);<br>    p = <span class="hljs-literal">NULL</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-4-使用free释放一块动态开辟内存的一部分"><a href="#3-4-使用free释放一块动态开辟内存的一部分" class="headerlink" title="3.4 使用free释放一块动态开辟内存的一部分"></a>3.4 使用free释放一块动态开辟内存的一部分</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">test</span><span class="hljs-params">()</span><br>&#123;<br>	<span class="hljs-type">int</span>* p = (<span class="hljs-type">int</span>*)<span class="hljs-built_in">malloc</span>(<span class="hljs-number">40</span>);<br>    <span class="hljs-keyword">if</span>(p==<span class="hljs-literal">NULL</span>)<br>    &#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>    &#125;<br>    <br>    <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">5</span>;i++)<br>    &#123;<br>		*p = i;<br>        p++;<br>    &#125;<br>    <br>    <span class="hljs-built_in">free</span>(p);<br>    p = <span class="hljs-literal">NULL</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-5对同一块动态内存多次释放"><a href="#3-5对同一块动态内存多次释放" class="headerlink" title="3.5对同一块动态内存多次释放"></a>3.5对同一块动态内存多次释放</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">test</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-type">int</span>* p = (<span class="hljs-type">int</span>*)<span class="hljs-built_in">malloc</span>(<span class="hljs-number">40</span>);<br>    <span class="hljs-comment">//...</span><br>    <span class="hljs-built_in">free</span>(p);<br>    <span class="hljs-comment">//p = NULL; - 解决方法 </span><br>    <span class="hljs-comment">//...</span><br>    <span class="hljs-built_in">free</span>(p);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-6-动态内存开辟忘记释放"><a href="#3-6-动态内存开辟忘记释放" class="headerlink" title="3.6 动态内存开辟忘记释放"></a>3.6 动态内存开辟忘记释放</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">///example1</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">test</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-type">int</span>* p = (<span class="hljs-type">int</span>*)<span class="hljs-built_in">malloc</span>(<span class="hljs-number">40</span>);<br>    <span class="hljs-comment">//...</span><br>    <span class="hljs-type">int</span> flag = <span class="hljs-number">0</span>;<br>    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>,&amp;flag); <span class="hljs-comment">//5</span><br>    <span class="hljs-keyword">if</span>(flag == <span class="hljs-number">5</span>)&#123;<br>        <span class="hljs-keyword">return</span>; <br>    &#125;<br>    <span class="hljs-comment">//...</span><br>    <span class="hljs-built_in">free</span>(p);<br>    p=<span class="hljs-literal">NULL</span>;<br>    <br>&#125;<br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span><br>&#123;<br>    test();<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//example2</span><br>vint* <span class="hljs-title function_">test</span><span class="hljs-params">()</span><br>&#123;<br>	<span class="hljs-type">int</span>* p = (<span class="hljs-type">int</span>*)<span class="hljs-built_in">malloc</span>(<span class="hljs-number">100</span>);<br>    <span class="hljs-keyword">if</span>(p==<span class="hljs-literal">NULL</span>)<br>    &#123;<br>		<span class="hljs-keyword">return</span> p;<br>    &#125;<br>    <span class="hljs-comment">//...</span><br>    <span class="hljs-keyword">return</span> p;<br>&#125;<br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-type">int</span>* ret = test();<br>    <span class="hljs-comment">//忘记释放</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="4-几个经典的笔试题"><a href="#4-几个经典的笔试题" class="headerlink" title="4.几个经典的笔试题"></a>4.几个经典的笔试题</h2><h3 id="4-1题目1"><a href="#4-1题目1" class="headerlink" title="4.1题目1"></a>4.1题目1</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">GetMemory</span><span class="hljs-params">(<span class="hljs-type">char</span> *p)</span><br>&#123;<br>	p = (cahr*)<span class="hljs-built_in">malloc</span>(<span class="hljs-number">100</span>);<br>    <span class="hljs-comment">//p是局部变量，出了函数直接销毁</span><br>&#125;<br><span class="hljs-type">void</span> <span class="hljs-title function_">Test</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-type">char</span>* str = <span class="hljs-literal">NULL</span>;<br>    GetMemory(str);<br>    <span class="hljs-built_in">strcpy</span>(str,<span class="hljs-string">&quot;hello world&quot;</span>);<br>    <span class="hljs-comment">//str是空指针，解引用时会崩溃</span><br>    <span class="hljs-built_in">printf</span>(str);<br>&#125;<br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span><br>&#123;<br>    Test();<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>运行Test函数会发生什么?</p>
+<h3 id="4-2-题目2"><a href="#4-2-题目2" class="headerlink" title="4.2 题目2"></a>4.2 题目2</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">char</span> *<span class="hljs-title function_">GetMemory</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-type">char</span> p[] = <span class="hljs-string">&quot;hello world&quot;</span>;<br>    <span class="hljs-keyword">return</span> p;<br>&#125;<br><span class="hljs-type">void</span> <span class="hljs-title function_">Test</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>	<span class="hljs-type">char</span> *str  = <span class="hljs-literal">NULL</span>;<br>    str = GetMemory();<br>    <span class="hljs-built_in">printf</span>(str);<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>运行Test函数会发生什么?</p>
+<h3 id="4-3-题目3"><a href="#4-3-题目3" class="headerlink" title="4.3 题目3"></a>4.3 题目3</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">GetMemory</span><span class="hljs-params">(<span class="hljs-type">char</span>* p,<span class="hljs-type">int</span> num)</span><br>&#123;<br>    *p = (<span class="hljs-type">char</span>*)<span class="hljs-built_in">malloc</span>(num);<br>&#125;<br><span class="hljs-type">void</span> <span class="hljs-title function_">Test</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-type">char</span> *str = <span class="hljs-literal">NULL</span>;<br>    GetMemory(&amp;str,<span class="hljs-number">100</span>);<br>    <span class="hljs-built_in">strcpy</span>(str,<span class="hljs-string">&quot;hello&quot;</span>);<br>    <span class="hljs-built_in">printf</span>(str);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>运行Test函数会发生什么?</p>
+<h3 id="4-4-题目4"><a href="#4-4-题目4" class="headerlink" title="4.4 题目4"></a>4.4 题目4</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span> <span class="hljs-title function_">Test</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    <span class="hljs-type">char</span> *str = (<span class="hljs-type">char</span>*)<span class="hljs-built_in">malloc</span>(<span class="hljs-number">100</span>);<br>    <span class="hljs-built_in">strcpy</span>(str,<span class="hljs-string">&quot;hello&quot;</span>);<br>    <span class="hljs-built_in">free</span>(str);<br>    <span class="hljs-keyword">if</span>(str!=<span class="hljs-literal">NULL</span>)<br>    &#123;<br>		<span class="hljs-built_in">strcpy</span>(str,<span class="hljs-string">&quot;world&quot;</span>);<br>        <span class="hljs-built_in">printf</span>(str);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>运行Test函数会发生什么?</p>
+<h2 id="5-C-x2F-C-程序的内存开辟"><a href="#5-C-x2F-C-程序的内存开辟" class="headerlink" title="5.C&#x2F;C++程序的内存开辟"></a>5.C&#x2F;C++程序的内存开辟</h2><p><img src="/img/%E5%8A%A8%E6%80%81%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/C&C++%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%86%85%E5%AD%98%E5%BC%80%E8%BE%9F1.jpg" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/img/%E5%8A%A8%E6%80%81%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/C&C++%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%86%85%E5%AD%98%E5%BC%80%E8%BE%9F2.jpg" srcset="/img/loading.gif" lazyload></p>
+<h2 id="6-柔性数组"><a href="#6-柔性数组" class="headerlink" title="6.柔性数组"></a>6.柔性数组</h2><blockquote>
+<p>C99中，结构中的最后一个元素允许是未知大小的数组，这就叫做【柔性数组】成员</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">st_type</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">int</span> i;<br>    <span class="hljs-type">int</span> a[<span class="hljs-number">0</span>];<span class="hljs-comment">//柔性数组成员</span><br>&#125;type_a;<br></code></pre></td></tr></table></figure>
+
+<p>有些编译器会报错无法编译可以改成：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">st_type</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">int</span> i;<br>    <span class="hljs-type">int</span> a[];<span class="hljs-comment">//柔性数组成员</span><br>&#125;type_a;<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-1-柔性数组的特点："><a href="#6-1-柔性数组的特点：" class="headerlink" title="6.1 柔性数组的特点："></a>6.1 柔性数组的特点：</h3><ul>
+<li>结构中的柔性数组成员前面必须至少一个其他成员。</li>
+<li>sizeof 返回的这种结构大小不包含柔性数组的内存。</li>
+<li>包含柔性数组成员的结构用malloc() 函数进行内存的动态分配，并且分配的内存应该大于结构的大小，以适应柔性数组的预期大小。</li>
+</ul>
+<p>例如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">st_type</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">int</span> i;<br>    <span class="hljs-type">int</span> a[<span class="hljs-number">0</span>];<span class="hljs-comment">//柔性数组成员</span><br>&#125;type_a;<br><span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>,<span class="hljs-keyword">sizeof</span>(type_a));  <span class="hljs-comment">//4</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="6-2-柔性数组的使用："><a href="#6-2-柔性数组的使用：" class="headerlink" title="6.2 柔性数组的使用："></a>6.2 柔性数组的使用：</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//代码1</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">st_type</span></span><br><span class="hljs-class">&#123;</span><br>    <span class="hljs-type">int</span> i;<br>    <span class="hljs-type">int</span> a[];<span class="hljs-comment">//柔性数组成员</span><br>&#125;type_a;<br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span><br>&#123;<br>	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">S</span>* <span class="hljs-title">ps</span>=</span> (<span class="hljs-keyword">struct</span> S*)<span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> S)+<span class="hljs-number">40</span>);<br>    <span class="hljs-keyword">if</span>(ps==<span class="hljs-literal">NULL</span>)<br>    &#123;<br>		<span class="hljs-comment">//...</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>    &#125;<br>    ps-&gt;n = <span class="hljs-number">100</span>;<br>    <br>    <span class="hljs-comment">//使用</span><br>    <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">10</span>;i++)<br>    &#123;<br>        ps-&gt;arr[i] = i;<br>    &#125;<br>    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">10</span>;i++)<br>    &#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d &quot;</span>,ps-&gt;arr[i]);<br>    &#125;<br>    <br>    <span class="hljs-comment">//扩容</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">S</span>* <span class="hljs-title">ptr</span> =</span> (<span class="hljs-keyword">struct</span> S*)<span class="hljs-built_in">realloc</span>(ps,<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> S)+<span class="hljs-number">80</span>);<br>    <span class="hljs-keyword">if</span>(ptr!=<span class="hljs-literal">NULL</span>)<br>    &#123;<br>        ps = ptr;<br>        ptr = <span class="hljs-literal">NULL</span>;<br>    &#125;<br>    <span class="hljs-comment">//...</span><br>    <span class="hljs-comment">//释放</span><br>    <span class="hljs-built_in">free</span>(ps);<br>    ps=<span class="hljs-literal">NULL</span>;<br>    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-3-柔性数组的优势"><a href="#6-3-柔性数组的优势" class="headerlink" title="6.3 柔性数组的优势"></a>6.3 柔性数组的优势</h3><p>上述的<code>type_a</code>结构也可以设计为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//代码2</span><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">st_type</span></span><br><span class="hljs-class">&#123;</span><br>	<span class="hljs-type">int</span> i;<br>    <span class="hljs-type">int</span> *p_a;<br>&#125;type_a;<br>type_a *p = (type_a*)<span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(type_a));<br>p-&gt;i=<span class="hljs-number">100</span>;<br>p-p_a = (<span class="hljs-type">int</span>*)<span class="hljs-built_in">malloc</span>((p-&gt;i)*<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>));<br><br><span class="hljs-comment">//使用</span><br><span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">100</span>;i++)<br>&#123;<br>    p-&gt;p_a[i] = i;<br>&#125;<br><br><span class="hljs-comment">//释放空间</span><br><span class="hljs-built_in">free</span>(p-p_a);<br>p-&gt;p_a = <span class="hljs-literal">NULL</span>;<br><span class="hljs-built_in">free</span>(p);<br>p = <span class="hljs-literal">NULL</span>;<br></code></pre></td></tr></table></figure>
+
+<p>上述<code>代码1</code>和<code>代码2</code>可以完成同样的功能，但是<code>方法1</code>的实现有两个好处：</p>
+<p><strong>1.方便内存释放</strong></p>
+<blockquote>
+<p>如果我们的代码是在一个给别人用的函数中，你在里面做了二次内存分配，并把整个结构体返回给用户。用户调用free可以释放结构体，但是用户并不知道这个结构体内的成员也需要free，所以你不能指望用户来发现这个事。所以，如果我们把结构体的内存以及其成员要的内存一次性分配好了，并返回给用户一个结构体指针，用户做一次free就可以把所有的内存也给释放掉。</p>
+</blockquote>
+<p><strong>2.这样有利于访问速度</strong></p>
+<blockquote>
+<p>连续的内存有益于提高访问速度，地有益于减少内存碎片。</p>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/C%E8%AF%AD%E8%A8%80/" class="category-chain-item">C语言</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/C/">#C</a>
+      
+        <a href="/tags/%E5%8A%A8%E6%80%81%E5%86%85%E5%AD%98/">#动态内存</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/02/27/%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%9E%8B%EF%BC%9A%E7%BB%93%E6%9E%84%E4%BD%93%E3%80%81%E6%9E%9A%E4%B8%BE%E5%92%8C%E8%81%94%E5%90%88/" title="自定义类型：结构体、枚举和联合">
+                        <span class="hidden-mobile">自定义类型：结构体、枚举和联合</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"KbBA0OepAHi9AzJfVnEVXTWV-gzGzoHsz","appKey":"gm95QX5JO6oIGCpRa0tCx9SN","path":"window.location.pathname","placeholder":"留言","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":true,"serverURLs":"https://kbba0oep.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
