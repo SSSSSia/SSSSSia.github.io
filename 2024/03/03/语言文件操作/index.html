@@ -25,7 +25,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/img/index_img3.jpg">
 <meta property="article:published_time" content="2024-03-03T15:18:53.000Z">
-<meta property="article:modified_time" content="2024-03-03T15:22:47.391Z">
+<meta property="article:modified_time" content="2024-03-04T01:06:20.276Z">
 <meta property="article:author" content="SSSSSia">
 <meta property="article:tag" content="C">
 <meta property="article:tag" content="文件操作">
@@ -222,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          9.3k words
+          9.8k words
         
       </span>
     
@@ -233,7 +233,7 @@
         
         
         
-          78 mins
+          83 mins
         
       </span>
     
@@ -547,6 +547,12 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-class"><span class="hljs-keyword">enum</span></span><br><span class="hljs-class">&#123;</span><br>  SIZE = <span class="hljs-number">53</span><br>&#125;;<br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>  <span class="hljs-type">double</span> a[SIZE] = &#123;<span class="hljs-number">1.</span>, <span class="hljs-number">2.</span>, <span class="hljs-number">3.</span>, <span class="hljs-number">4.</span>, <span class="hljs-number">5.</span>&#125;;<br>  FILE *fp = fopen(<span class="hljs-string">&quot;test.bin&quot;</span>, <span class="hljs-string">&quot;wb&quot;</span>); <span class="hljs-comment">// 必须用二进制模式</span><br>  fwrite(a, <span class="hljs-keyword">sizeof</span> *a, SIZE, fp);     <span class="hljs-comment">// 写 double 的数组</span><br>  fclose(fp);<br><br>  <span class="hljs-type">double</span> b[SIZE];<br>  fp = fopen(<span class="hljs-string">&quot;test.bin&quot;</span>, <span class="hljs-string">&quot;rb&quot;</span>);<br>  <span class="hljs-type">size_t</span> ret_code = fread(b, <span class="hljs-keyword">sizeof</span> *b, SIZE, fp); <span class="hljs-comment">// 读 double 的数组</span><br>  <span class="hljs-keyword">if</span> (ret_code == SIZE)<br>  &#123;<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;Array read successfully, contents: &quot;</span>);<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> n = <span class="hljs-number">0</span>; n &lt; SIZE; ++n)<br>    &#123;<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%f &quot;</span>, b[n]);<br>    &#125;<br>    <span class="hljs-built_in">putchar</span>(<span class="hljs-string">&#x27;\n&#x27;</span>);<br>  &#125;<br>  <span class="hljs-keyword">else</span><br>  &#123; <span class="hljs-comment">// error handling</span><br>    <span class="hljs-keyword">if</span> (feof(fp))<br>    &#123;<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error reading test.bin: unexpected end of file\n&quot;</span>);<br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (ferror(fp))<br>    &#123;<br>      perror(<span class="hljs-string">&quot;Error reading test.bin&quot;</span>);<br>    &#125;<br>  &#125;<br>  fclose(fp);<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <h2 id="7-文件缓冲区"><a href="#7-文件缓冲区" class="headerlink" title="7.文件缓冲区"></a>7.文件缓冲区</h2><p>​		ANSIC标准采用<strong>“缓冲文件系统”</strong>处理的数据文件的，所谓缓冲文件系统是指系统自动地在内存中为程序中每一个正在使用的文件开辟一块<strong>“文件缓冲区”</strong>。从内存向磁盘输出数据会先送到内存中的缓冲区，装满缓冲区后才一起送到磁盘上。如果从磁盘向计算机读入数据，则从磁盘文件中读取数据输入到内存缓冲区(充满缓冲区)，然后再从缓冲区逐个地将数据送到程序数据区(程序变量等)。缓冲区的大小根据C编译系统决定的。</p>
+<p><img src="/img/%E8%AF%AD%E8%A8%80%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C/%E6%96%87%E4%BB%B6%E7%BC%93%E5%86%B2%E5%8C%BA.jpg" srcset="/img/loading.gif" lazyload alt="文件缓冲区"></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;windows.h&gt;</span></span><br><span class="hljs-comment">// VS2013 WIN10环境测试</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span><br>&#123;<br>  FILE *pf = fopen(<span class="hljs-string">&quot;test.txt&quot;</span>,<span class="hljs-string">&quot;w&quot;</span>);<br>  <span class="hljs-built_in">fputs</span>(<span class="hljs-string">&quot;abcdef&quot;</span>,pf); <span class="hljs-comment">// 先将代码放在输出缓冲区</span><br>    <br>  <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;睡眠10秒-已经写数据了,打开test.txt文件,发现文件没有内容\n&quot;</span>);<br>  sleep(<span class="hljs-number">10000</span>);<br>  <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;刷新缓冲区\n&quot;</span>);<br>  fflush(pf); <span class="hljs-comment">// 刷新缓冲区时,才将输出缓冲区的数据写到文件(磁盘)</span><br>  <span class="hljs-comment">// 注: fflush 在高版本的VS上不能使用了</span><br>  <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;再睡眠10秒-此时,再次打开test.txt文件,文件有内容了\n&quot;</span>);<br>  sleep(<span class="hljs-number">10000</span>);<br>  fclose(pf);<br>  <span class="hljs-comment">// 注: fclose在关闭文件的时候,也会刷新缓冲区</span><br>  pf = <span class="hljs-literal">NULL</span>;<br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这里可以得出一个<strong>结论</strong>:</p>
+<p>因为有缓冲区的存在，C语言在操作文件的时候，需要做刷新缓冲区或者在文件操作结束的时候关闭文件。</p>
+<p>如果不做，可能导致读写文件的问题。</p>
 
                 
               </div>
