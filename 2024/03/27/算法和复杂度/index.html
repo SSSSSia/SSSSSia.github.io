@@ -25,7 +25,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://example.com/img/index_img5.jpg">
 <meta property="article:published_time" content="2024-03-27T06:20:34.000Z">
-<meta property="article:modified_time" content="2024-03-27T06:23:10.072Z">
+<meta property="article:modified_time" content="2024-03-27T06:33:24.496Z">
 <meta property="article:author" content="SSSSSia">
 <meta property="article:tag" content="C">
 <meta property="article:tag" content="数据结构">
@@ -234,7 +234,7 @@
         
         
         
-          39 mins
+          38 mins
         
       </span>
     
@@ -299,7 +299,8 @@
 </blockquote>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">//计算Func1中++count语句总共执行了多少次？</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">Func1</span><span class="hljs-params">(<span class="hljs-type">int</span> N)</span><br>&#123;<br>    <span class="hljs-type">int</span> count;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;N;i++)<br>    &#123;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> j=<span class="hljs-number">0</span>;i&lt;N;j++)<br>        &#123;<br>            count++;<br>        &#125;<br>    &#125;<br>    <br>    <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> k=<span class="hljs-number">0</span>;k&lt;<span class="hljs-number">2</span>*N;k++)<br>    &#123;<br>        count++;<br>    &#125;<br>    <span class="hljs-type">int</span> M=<span class="hljs-number">10</span>;<br>    <span class="hljs-keyword">while</span>(M--)<br>    &#123;<br>		count++;<br>    &#125;<br>    <br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d\n&quot;</span>,count);<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p><strong>Func1执行的基本操作次数:</strong><br>$$<br>F(N) &#x3D; N^2 + 2*N+10<br>$$</p>
+<p><strong>Func1执行的基本操作次数:</strong></p>
+<p><img src="/img/%E7%AE%97%E6%B3%95%E5%92%8C%E5%A4%8D%E6%9D%82%E5%BA%A6/1.jpg" srcset="/img/loading.gif" lazyload></p>
 <ul>
 <li>N &#x3D; 10			F(N) &#x3D; 130</li>
 <li>N &#x3D; 100			F(N) &#x3D; 10210</li>
@@ -313,7 +314,8 @@
 <p>1、用常数1取代运行时间中的所有加法常数。<br>2、在修改后的运行次数函数中，只保留最高阶项。<br>3、如果最高阶项存在且不是1，则去除与这个项目相乘的常数。得到的结果就是大O阶。</p>
 </blockquote>
 <p>即：保留对结果影响最大的一项</p>
-<p>使用大O的渐进表示法以后，Func1的时间复杂度为:<br>$$<br>O(N^2)<br>$$</p>
+<p>使用大O的渐进表示法以后，Func1的时间复杂度为:</p>
+<p><img src="/img/%E7%AE%97%E6%B3%95%E5%92%8C%E5%A4%8D%E6%9D%82%E5%BA%A6/2.jpg" srcset="/img/loading.gif" lazyload></p>
 <ul>
 <li>N &#x3D; 10			F(N) &#x3D; 100</li>
 <li>N &#x3D; 100			F(N) &#x3D; 10000</li>
@@ -355,14 +357,14 @@
 
 <p><strong>实例答案及分析:</strong></p>
 <ol>
-<li>实例1基本操作执行了2N+10次，通过推导大O阶方法知道，时间复杂度为 $O(N)$</li>
-<li>实例2基本操作执行了M+N次，有两个未知数M和N，时间复杂度为$O(N+M)$</li>
-<li>实例3基本操作执行了10次，通过推导大O阶方法，时间复杂度为$ O(1)$</li>
-<li>实例4基本操作执行最好1次，最坏N次，时间复杂度一般看最坏，时间复杂度为 $O(N)$</li>
-<li>实例5基本操作执行最好N次，最坏执行了(N*(N+1)2次（等差数列），通过推导大O阶方法+时间复杂度一般看最坏，时间复杂度为 $O(N^2)$</li>
-<li>实例6基本操作执行最好1次，最坏$O(log_2 N)$次，时间复杂度为 (log_2 N) ps: log_2 N在算法分析中表示是底数为2，对数为N。有些地方会写成lgN。 (建议通过折纸查找的方式讲解logN是怎么计算出来的)</li>
-<li>实例7通过计算分析发现基本操作递归了N次，时间复杂度为$O(N)$。</li>
-<li>实例8每递归一次调用两次递归，执行次数近似为等比数列$F(N) &#x3D; 2^N-1-X$，时间复杂度为$O(2^N) $</li>
+<li>实例1基本操作执行了2N+10次，通过推导大O阶方法知道，时间复杂度为 O(N)</li>
+<li>实例2基本操作执行了M+N次，有两个未知数M和N，时间复杂度为O(N+M)</li>
+<li>实例3基本操作执行了10次，通过推导大O阶方法，时间复杂度为 O(1)</li>
+<li>实例4基本操作执行最好1次，最坏N次，时间复杂度一般看最坏，时间复杂度为 O(N)</li>
+<li>实例5基本操作执行最好N次，最坏执行了(N*(N+1))&#x2F;2次（等差数列），通过推导大O阶方法+时间复杂度一般看最坏，时间复杂度为 O(N^2)</li>
+<li>实例6基本操作执行最好1次，最坏O(log_2 N)次，时间复杂度为 (log_2 N) ps: log_2 N在算法分析中表示是底数为2，对数为N。有些地方会写成lgN。 (建议通过折纸查找的方式讲解logN是怎么计算出来的)</li>
+<li>实例7通过计算分析发现基本操作递归了N次，时间复杂度为O(N)。</li>
+<li>实例8每递归一次调用两次递归，执行次数近似为等比数列F(N) &#x3D; 2^N-1-X，时间复杂度为O(2^N)</li>
 </ol>
 <h2 id="3-空间复杂度"><a href="#3-空间复杂度" class="headerlink" title="3.空间复杂度"></a>3.空间复杂度</h2><blockquote>
 <p>空间复杂度也是一个数学表达式，是对一个算法在运行过程中<strong>临时占用存储空间大小的量度。</strong></p>
