@@ -16,20 +16,22 @@
   <meta name="author" content="SSSSSia">
   <meta name="keywords" content="">
   
-    <meta name="description" content="二叉树二叉树的性质 性质一： 对于一棵二叉树，第i层的最大结点数量为 $2^{i-1}$ 个.  性质二： 对于一棵深度为k的二叉树，可以具有的最大结点数量为：$$n &#x3D; 2^0 + 2^1 + 2^2 + … + 2^{k-1}$$等比数列求和：$$S_n &#x3D; \frac {a_1 \times (1 - q^n)} {1 - q} &#x3D; \frac {1 \time">
+    <meta name="description" content="二叉树、线索化二叉树、二叉查找树、平衡二叉树、哈夫曼树、堆和优先级队列的代码实现">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C语言实现树形结构">
 <meta property="og:url" content="http://example.com/2024/04/02/C%E8%AF%AD%E8%A8%80%E5%AE%9E%E7%8E%B0%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84/index.html">
 <meta property="og:site_name" content="SSSSSia">
-<meta property="og:description" content="二叉树二叉树的性质 性质一： 对于一棵二叉树，第i层的最大结点数量为 $2^{i-1}$ 个.  性质二： 对于一棵深度为k的二叉树，可以具有的最大结点数量为：$$n &#x3D; 2^0 + 2^1 + 2^2 + … + 2^{k-1}$$等比数列求和：$$S_n &#x3D; \frac {a_1 \times (1 - q^n)} {1 - q} &#x3D; \frac {1 \time">
+<meta property="og:description" content="二叉树、线索化二叉树、二叉查找树、平衡二叉树、哈夫曼树、堆和优先级队列的代码实现">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://s2.loli.net/2022/08/05/uan6A3ZRLykt289.png">
-<meta property="og:image" content="https://s2.loli.net/2022/08/08/XvH4At8Q93nkFIR.png">
+<meta property="og:image" content="http://example.com/img/index_img7.jpg">
 <meta property="article:published_time" content="2024-04-02T06:47:23.000Z">
-<meta property="article:modified_time" content="2024-04-02T12:35:13.690Z">
+<meta property="article:modified_time" content="2024-04-02T12:41:09.013Z">
 <meta property="article:author" content="SSSSSia">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="数据结构">
+<meta property="article:tag" content="树形结构">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://s2.loli.net/2022/08/05/uan6A3ZRLykt289.png">
+<meta name="twitter:image" content="http://example.com/img/index_img7.jpg">
   
   
   
@@ -192,7 +194,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/banner_img5.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('/img/banner_img14.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -357,6 +359,38 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="category-chain-item">数据结构</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/C/">#C</a>
+      
+        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">#数据结构</a>
+      
+        <a href="/tags/%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84/">#树形结构</a>
+      
+    </div>
   
 </div>
 
