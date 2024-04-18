@@ -1,0 +1,680 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="SSSSSia">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Linux环境，实现(低)并发HTTP服务器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Socket编程实现并发HTTP服务器">
+<meta property="og:url" content="http://example.com/2024/04/18/Socket%E7%BC%96%E7%A8%8B%E5%AE%9E%E7%8E%B0%E5%B9%B6%E5%8F%91HTTP%E6%9C%8D%E5%8A%A1%E5%99%A8/index.html">
+<meta property="og:site_name" content="SSSSSia">
+<meta property="og:description" content="Linux环境，实现(低)并发HTTP服务器">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/index_img14.jpg">
+<meta property="article:published_time" content="2024-04-18T08:25:26.000Z">
+<meta property="article:modified_time" content="2024-04-18T08:28:17.149Z">
+<meta property="article:author" content="SSSSSia">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="服务器">
+<meta property="article:tag" content="Socket">
+<meta property="article:tag" content="网络编程">
+<meta property="article:tag" content="HTTP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/index_img14.jpg">
+  
+  
+  
+  <title>Socket编程实现并发HTTP服务器 - SSSSSia</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"KbBA0OepAHi9AzJfVnEVXTWV-gzGzoHsz","app_key":"gm95QX5JO6oIGCpRa0tCx9SN","server_url":"https://kbba0oep.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 95vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>SSSSSia</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                主页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner_img14.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Socket编程实现并发HTTP服务器"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-04-18 16:25" pubdate>
+          April 18, 2024 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          13k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          107 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> views
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+        <div class="scroll-down-bar">
+          <i class="iconfont icon-arrowdown"></i>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Socket编程实现并发HTTP服务器</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Socket-编程实现并发-HTTP-服务器"><a href="#Socket-编程实现并发-HTTP-服务器" class="headerlink" title="Socket 编程实现并发 HTTP 服务器"></a>Socket 编程实现并发 HTTP 服务器</h1><h2 id="前置知识"><a href="#前置知识" class="headerlink" title="前置知识"></a>前置知识</h2><h3 id="1-读取文件"><a href="#1-读取文件" class="headerlink" title="1.读取文件"></a>1.读取文件</h3><p><strong>文件概念：</strong> 文件 &#x3D; 块（文件数据）+Inode（元信息）</p>
+<p>inode - ‘’索引节点’’，存储文件的元信息，比如文件的创建者、文件的创建日期、文件的大小等待。每个inode都有一个号码，操作系统用inode号码来识别不同的文件。<code>ls -i</code> 查看文件inode号。</p>
+<h3 id="2-关于启动服务器出现问题后，一些处理方法："><a href="#2-关于启动服务器出现问题后，一些处理方法：" class="headerlink" title="2.关于启动服务器出现问题后，一些处理方法："></a>2.关于启动服务器出现问题后，一些处理方法：</h3><p>使用命令：<code>ps -ef | grep http</code> 查看进程，看是否已经有进程在运行</p>
+<p>如果有，使用相关 kill 命令杀死该进程：<code>kill 进程号</code></p>
+<h3 id="3-stat-函数"><a href="#3-stat-函数" class="headerlink" title="3.stat 函数"></a>3.stat 函数</h3><p>​	<strong>作用：</strong>返回文件的状态信息</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/types.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/stat.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">stat</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *pathname,<span class="hljs-keyword">struct</span> stat* statbuf)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">fstat</span><span class="hljs-params">(<span class="hljs-type">int</span> fd,<span class="hljs-keyword">struct</span> stat* statbuf)</span>;<br><span class="hljs-type">int</span> <span class="hljs-title function_">lstat</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *pathname,<span class="hljs-keyword">struct</span> stat* statbuf)</span>;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>pathname:<br>    文件的路径</p>
+<p>statbuf:<br>    传入的保存文件状态的指针，用于保存文件的状态</p>
+<p>返回值：<br>    成功返回0，失败返回-1，设置 errno</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">stat</span> &#123;</span><br>    <span class="hljs-type">dev_t</span>	st_dev;		<span class="hljs-comment">/* ID of device containing file */</span><br>    <span class="hljs-type">ino_t</span>	st_ino;		<span class="hljs-comment">/* Inode number */</span><br>    <span class="hljs-type">mode_t</span>	st_mode;	<span class="hljs-comment">/* File type and mode | S_ISREG(st_mode) 为真 - 普通文件 S_ISDIR(st_mode) 为真 - 目录*/</span><br>    <span class="hljs-type">nlink_t</span>	st_nlink;	<span class="hljs-comment">/* Number of hard links */</span><br>    <span class="hljs-type">uid_t</span>	st_uid;		<span class="hljs-comment">/* User ID of owner */</span><br>    <span class="hljs-type">gid_t</span>	st_gid;		<span class="hljs-comment">/* Group ID of owner */</span><br>    <span class="hljs-type">dev_t</span>	st_rdev;	<span class="hljs-comment">/* Device ID (if special file) */</span><br>    <span class="hljs-type">off_t</span> 	st_size;	<span class="hljs-comment">/* Total size, in bytes */</span><br>    <span class="hljs-type">blksize_t</span> st_blksize;	<span class="hljs-comment">/* Block size for filesystem I/O */</span><br>    <span class="hljs-type">blkcnt_t</span>  st_blocks;	<span class="hljs-comment">/* Number of 512B blocks allocated */</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">timespec</span> <span class="hljs-title">st_atim</span>;</span>  <span class="hljs-comment">/* Time of last access */</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">timespec</span> <span class="hljs-title">st_mtim</span>;</span>  <span class="hljs-comment">/* Time of last modification */</span><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">timespec</span> <span class="hljs-title">st_ctim</span>;</span>  <span class="hljs-comment">/* Time of last status change */</span><br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-pthread-create-函数"><a href="#4-pthread-create-函数" class="headerlink" title="4.pthread_create 函数"></a>4.pthread_create 函数</h3><p>创建一个新线程，并行地执行任务</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">pthread_create</span><span class="hljs-params">(<span class="hljs-type">pthread_t</span> *thread,<span class="hljs-type">const</span> <span class="hljs-type">pthread_attr_t</span> *attr,<span class="hljs-type">void</span>*(*start_routine)(<span class="hljs-type">void</span>*),<span class="hljs-type">void</span> *arg)</span>;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>thread:<br>    传出参数，指向一个 pthread_t 类型变量的指针，用于存储系统分配好的线程 ID。pthread_t 可理解为 typedef unsigned long int</p>
+<p>attr:<br>    线程属性，通常设置为 NULL，表示使用线程默认属性。</p>
+<p>start_routine:<br>    函数指针，指向线程主函数（线程体），该函数运行结束，则线程结束</p>
+<p>arg:<br>    传递给 start_routine 函数的参数，如果不需要传递参数，可以设置为 NULL</p>
+<p>返回值:<br>    成功返回 0 ，失败返回错误编号</p>
+</blockquote>
+<p>​		在一个线程中调用 pthread_create() 函数创建新的线程后，当前线程从pthread_create() 返回继续往下执行，而新的线程所执行的代码由我们传给 pthread_create() 的函数指针 start_routine 决定。start_routine 函数接收一个参数，是通过 pthread_create() 的 arg参数传递给它的，该参数的类型为 void* ,这个指针按什么类型解释由调用者自己定义。start_routine 的返回值类型也是 void*,这个指针的含义同样由调用者自己定义。start_routine 返回时，这个线程就退出了，其它线程可以调用 pthread_join() 得到 start_routine 的返回值，后面再详细介绍<br>pthread_join。pthread_create() 成功返回后，新创建的线程的 id 被填写到 thread 参数所指向的内存单元。</p>
+<h3 id="5-代码实现"><a href="#5-代码实现" class="headerlink" title="5.代码实现"></a>5.代码实现</h3><h4 id="http-server-c"><a href="#http-server-c" class="headerlink" title="http_server.c"></a>http_server.c</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;handle_http.h&quot;</span></span><br><br><span class="hljs-type">void</span> <span class="hljs-title function_">perror_exit</span><span class="hljs-params">(<span class="hljs-type">const</span> <span class="hljs-type">char</span> *des)</span><br>&#123;<br>	<span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">&quot;%s error,reason: %s\n&quot;</span>, des, strerror(errno));<br>	<span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br><br>	<span class="hljs-comment">// 代表信箱</span><br>	<span class="hljs-type">int</span> sock;<br>	<span class="hljs-type">int</span> i;<br>	<span class="hljs-comment">// 代表标签</span><br>	<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sockaddr_in</span> <span class="hljs-title">server_addr</span>;</span><br>	<span class="hljs-comment">// 创建一个信箱</span><br>	sock = socket(AF_INET, SOCK_STREAM, <span class="hljs-number">0</span>);<br>	<span class="hljs-keyword">if</span> (sock == <span class="hljs-number">-1</span>)<br>		perror_exit(<span class="hljs-string">&quot;socket&quot;</span>);<br><br>	<span class="hljs-comment">// 清空标签，写上地址和端口号</span><br>	bzero(&amp;server_addr, <span class="hljs-keyword">sizeof</span>(server_addr));<br><br>	<span class="hljs-comment">// 选择协议族IPv4</span><br>	server_addr.sin_family = AF_INET;<br><br>	<span class="hljs-comment">// 监听本地所有IP地址</span><br>	server_addr.sin_addr.s_addr = htonl(INADDR_ANY);<br><br>	<span class="hljs-comment">// inet_pton(AF_INET,IP,&amp;server_addr.sin_addr.s_addr);</span><br><br>	<span class="hljs-comment">// 绑定端口号</span><br>	server_addr.sin_port = htons(SERVER_PORT);<br>	<span class="hljs-comment">// 实现标签贴到信箱上</span><br>	<span class="hljs-type">int</span> b = bind(sock, (<span class="hljs-keyword">struct</span> sockaddr *)&amp;server_addr, <span class="hljs-keyword">sizeof</span>(server_addr));<br>	<span class="hljs-keyword">if</span> (b == <span class="hljs-number">-1</span>)<br>		perror_exit(<span class="hljs-string">&quot;bind&quot;</span>);<br><br>	<span class="hljs-comment">// 规定同一时刻客户端向服务器发起求情的数量</span><br>	<span class="hljs-type">int</span> l = listen(sock, <span class="hljs-number">128</span>);<br>	<span class="hljs-keyword">if</span> (l == <span class="hljs-number">-1</span>)<br>		perror_exit(<span class="hljs-string">&quot;listen&quot;</span>);<br><br>	<span class="hljs-comment">// 接收请求</span><br>	<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;等待客户端的链接\n&quot;</span>);<br><br>	<span class="hljs-type">int</span> done = <span class="hljs-number">1</span>;<br>	<span class="hljs-keyword">while</span> (done)<br>	&#123;<br>		<span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sockaddr_in</span> <span class="hljs-title">client</span>;</span><br>		<span class="hljs-type">int</span> client_sock;<br>		<span class="hljs-type">char</span> client_ip[<span class="hljs-number">64</span>];<br>		<span class="hljs-type">char</span> buf[<span class="hljs-number">256</span>];<br>		<span class="hljs-type">int</span> len;<br><br>		<span class="hljs-type">socklen_t</span> client_addr_len;<br>		client_addr_len = <span class="hljs-keyword">sizeof</span>(client);<br>		client_sock = accept(sock, (<span class="hljs-keyword">struct</span> sockaddr *)&amp;client, &amp;client_addr_len);<br><br>		<span class="hljs-comment">// 打印客户端地址和端口号</span><br>		<span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;client ip: %s\t port: %d\n&quot;</span>,<br>					 inet_ntop(AF_INET, &amp;client.sin_addr.s_addr, client_ip, <span class="hljs-keyword">sizeof</span>(client_ip)), ntohs(client.sin_port));<br><br>		<span class="hljs-comment">// 处理http请求</span><br>		<span class="hljs-comment">// do_http_request(client_sock);</span><br><br>		<span class="hljs-comment">// 启动线程处理 HTTP 请求</span><br>		<span class="hljs-type">pthread_t</span> id;<br>		<span class="hljs-type">int</span> *pclient_sock = <span class="hljs-literal">NULL</span>;<br>		pclient_sock = (<span class="hljs-type">int</span> *)<span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>));<br>		*pclient_sock = client_sock;<br>		pthread_create(&amp;id, <span class="hljs-literal">NULL</span>, do_http_request, (<span class="hljs-type">void</span> *)pclient_sock);<br>	&#125;<br><br>	<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h4 id="handle-http-c"><a href="#handle-http-c" class="headerlink" title="handle_http.c"></a>handle_http.c</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br><span class="line">375</span><br><span class="line">376</span><br><span class="line">377</span><br><span class="line">378</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;handle_http.h&quot;</span></span><br><br><span class="hljs-comment">// 解析处理http 请求</span><br><span class="hljs-type">void</span> *<span class="hljs-title function_">do_http_request</span><span class="hljs-params">(<span class="hljs-type">void</span> *pclient_sock)</span><br>&#123;<br>  <span class="hljs-comment">// 处理线程函数传入的参数，强制转换后得到int 类型的client_sock</span><br>  <span class="hljs-type">int</span> client_sock = *(<span class="hljs-type">int</span> *)pclient_sock;<br>  <span class="hljs-comment">// 保存每行读取到的字符数</span><br>  <span class="hljs-type">int</span> len = <span class="hljs-number">0</span>;<br>  <span class="hljs-comment">// 保存每行读取到的字符</span><br>  <span class="hljs-type">char</span> buf[<span class="hljs-number">256</span>];<br><br>  <span class="hljs-comment">// 保存请求的方法 -- &quot;GET&quot;、&quot;POST&quot;、&quot;PUT&quot;...</span><br>  <span class="hljs-type">char</span> method[<span class="hljs-number">64</span>];<br>  <span class="hljs-comment">// 保存请求的资源路径 -- &quot;/index.html&quot;</span><br>  <span class="hljs-type">char</span> url[<span class="hljs-number">256</span>];<br>  <span class="hljs-comment">// 保存处理后的，服务器内部相对路径 -- &quot;/src/index.html&quot;</span><br>  <span class="hljs-type">char</span> path[<span class="hljs-number">256</span>];<br><br>  <span class="hljs-comment">// 创建stat结构体，用来保存获取到的文件的状态信息</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">stat</span> <span class="hljs-title">st</span>;</span><br><br>  <span class="hljs-comment">// 读取客户端发送的 http 请求</span><br>  <span class="hljs-comment">// 1.读取请求行 - 每次读一行</span><br>  len = get_line(client_sock, buf, <span class="hljs-keyword">sizeof</span>(buf));<br><br>  <span class="hljs-keyword">if</span> (len &gt; <span class="hljs-number">0</span>)<br>  &#123; <span class="hljs-comment">// 读到了请求行</span><br>    <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>, j = <span class="hljs-number">0</span>;<br>    <span class="hljs-comment">// 解析头部，保存请求方法</span><br>    <span class="hljs-keyword">while</span> (buf[j] != <span class="hljs-string">&#x27; &#x27;</span> &amp;&amp; i &lt; (<span class="hljs-keyword">sizeof</span>(method) - <span class="hljs-number">1</span>))<br>    &#123;<br>      method[i] = buf[j];<br>      i++;<br>      j++;<br>    &#125;<br>    method[i] = <span class="hljs-string">&#x27;\0&#x27;</span>;<br>    <span class="hljs-comment">// if(debug) printf(&quot;request method : %s\n&quot;,method);</span><br><br>    <span class="hljs-comment">// 只处理 get 请求 strncasecmp -- 忽略大小写比较字符串相等</span><br>    <span class="hljs-keyword">if</span> (strncasecmp(method, <span class="hljs-string">&quot;GET&quot;</span>, <span class="hljs-built_in">strlen</span>(method)) == <span class="hljs-number">0</span>)<br>    &#123;<br>      <span class="hljs-keyword">if</span> (debug)<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;method = &#x27;GET&#x27;\n&quot;</span>);<br><br>      <span class="hljs-comment">/*-----------------------------------------------------------------*/</span><br>      <span class="hljs-comment">// 获取url</span><br>      <span class="hljs-comment">// while(isspace(buf[j++])); //跳过空格</span><br>      i = <span class="hljs-number">0</span>;<br>      j++;<br>      <span class="hljs-keyword">while</span> (buf[j] != <span class="hljs-string">&#x27; &#x27;</span> &amp;&amp; i &lt; (<span class="hljs-keyword">sizeof</span>(url) - <span class="hljs-number">1</span>))<br>      &#123;<br>        url[i] = buf[j];<br>        i++;<br>        j++;<br>      &#125;<br>      url[i] = <span class="hljs-string">&#x27;\0&#x27;</span>;<br><br>      <span class="hljs-comment">//*** 定位服务器本地的 html 文件</span><br><br>      <span class="hljs-comment">// 处理 url 中 ? 后面的参数</span><br>      &#123;<br>        <span class="hljs-comment">// strchr 函数返回的是指向该字符的指针，未找到则返回空指针</span><br>        <span class="hljs-type">char</span> *pos = <span class="hljs-built_in">strchr</span>(url, <span class="hljs-string">&#x27;?&#x27;</span>);<br>        <span class="hljs-keyword">if</span> (pos)<br>        &#123;<br>          *pos = <span class="hljs-string">&#x27;\0&#x27;</span>;<br>          <span class="hljs-keyword">if</span> (debug)<br>            <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;url : %s\n&quot;</span>, url);<br>        &#125;<br>      &#125;<br><br>      <span class="hljs-comment">// 将 url 格式化后写入 path</span><br>      <span class="hljs-built_in">sprintf</span>(path, <span class="hljs-string">&quot;./src%s&quot;</span>, url);<br>      <span class="hljs-keyword">if</span> (debug)<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>, path);<br><br>      <span class="hljs-comment">/*-----------------------------------------------------------------*/</span><br><br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;---------------------------------\n\n&quot;</span>);<br><br>      <span class="hljs-comment">// 完整打印首行</span><br>      <span class="hljs-keyword">if</span> (debug)<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>, buf);<br>      <span class="hljs-comment">// 继续处理 http 头部</span><br>      <span class="hljs-keyword">do</span><br>      &#123;<br>        len = get_line(client_sock, buf, <span class="hljs-keyword">sizeof</span>(buf));<br>        <span class="hljs-keyword">if</span> (debug)<br>          <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>, buf);<br>      &#125; <span class="hljs-keyword">while</span> (len &gt; <span class="hljs-number">0</span>);<br><br>      <span class="hljs-comment">/*-----------------------------------------------------------------*/</span><br><br>      <span class="hljs-comment">// 执行 http 响应</span><br>      <span class="hljs-comment">// 判断文件是否存在，如果存在就响应 200 OK，同时发送相应的html 文件；如果不存在就响应404 NOT FOUND</span><br>      <span class="hljs-keyword">if</span> (stat(path, &amp;st) == <span class="hljs-number">-1</span>)<br>      &#123; <span class="hljs-comment">// 文件不存在或出错 stat 返回-1，成功返回 0</span><br>        <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">&quot;stat %s failed.reason:%s\n&quot;</span>, path, strerror(errno));<br>        not_found(client_sock);<br>      &#125;<br>      <span class="hljs-keyword">else</span><br>      &#123; <span class="hljs-comment">// 文件存在且为目录</span><br>        <span class="hljs-keyword">if</span> (S_ISDIR(st.st_mode))<br>        &#123;<br>          <span class="hljs-comment">// 默认追加该目录下的index页面</span><br>          <span class="hljs-built_in">strcat</span>(path, <span class="hljs-string">&quot;/index.html&quot;</span>);<br>        &#125;<br><br>        do_http_response(client_sock, path);<br>      &#125;<br>    &#125;<br>    <span class="hljs-keyword">else</span><br>    &#123; <span class="hljs-comment">// 非 GET 请求，读取 http 头部,并响应客户端 501</span><br>      <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">&quot;Error Request :[%s]\n\n&quot;</span>, method);<br><br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>, buf);<br>      <span class="hljs-keyword">do</span><br>      &#123;<br>        len = get_line(client_sock, buf, <span class="hljs-keyword">sizeof</span>(buf));<br>        <span class="hljs-keyword">if</span> (debug)<br>          <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%s\n&quot;</span>, buf);<br>      &#125; <span class="hljs-keyword">while</span> (len &gt; <span class="hljs-number">0</span>);<br><br>      <span class="hljs-comment">// TODO 返回响应结果 501</span><br>      <span class="hljs-comment">// 请求方法未实现</span><br>      unimplemented(client_sock);<br>    &#125;<br>  &#125;<br>  <span class="hljs-keyword">else</span><br>  &#123; <span class="hljs-comment">// 请求格式有问题，出错处理</span><br>    bad_request(client_sock);<br>  &#125;<br>  close(client_sock);<br>  <span class="hljs-keyword">if</span> (pclient_sock)<br>    <span class="hljs-built_in">free</span>(pclient_sock); <span class="hljs-comment">// 释放内存</span><br>  <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">do_http_response</span><span class="hljs-params">(<span class="hljs-type">int</span> client_sock, <span class="hljs-type">const</span> <span class="hljs-type">char</span> *path)</span><br>&#123;<br><br>  FILE *resource = <span class="hljs-literal">NULL</span>;<br>  resource = fopen(path, <span class="hljs-string">&quot;r&quot;</span>);<br>  <span class="hljs-keyword">if</span> (resource == <span class="hljs-literal">NULL</span>)<br>  &#123;<br>    not_found(client_sock);<br>    <span class="hljs-keyword">return</span>;<br>  &#125;<br><br>  <span class="hljs-type">int</span> flag;<br><br>  <span class="hljs-comment">// 1.发送 http 头部</span><br>  flag = header(client_sock, resource);<br><br>  <span class="hljs-keyword">if</span> (flag)<br>  &#123;<br>    <span class="hljs-comment">// 2.发送 http body 部分</span><br>    body(client_sock, resource);<br>  &#125;<br><br>  fclose(resource);<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">header</span><span class="hljs-params">(<span class="hljs-type">int</span> client_sock, FILE *resource)</span><br>&#123;<br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">stat</span> <span class="hljs-title">st</span>;</span><br>  <span class="hljs-type">char</span> buf[<span class="hljs-number">1024</span>] = &#123;<span class="hljs-number">0</span>&#125;;<br>  <span class="hljs-type">int</span> fileId = <span class="hljs-number">0</span>;<br>  <span class="hljs-type">char</span> size[<span class="hljs-number">64</span>];<br><br>  <span class="hljs-built_in">strcat</span>(buf, <span class="hljs-string">&quot;HTTP/1.0 200 OK\r\n&quot;</span>);<br>  <span class="hljs-built_in">strcat</span>(buf, <span class="hljs-string">&quot;Server: SSSSSia Server\r\n&quot;</span>);<br>  <span class="hljs-built_in">strcat</span>(buf, <span class="hljs-string">&quot;Content-Type: text/html\r\n&quot;</span>);<br>  <span class="hljs-built_in">strcat</span>(buf, <span class="hljs-string">&quot;Connection: Close\r\n&quot;</span>);<br><br>  <span class="hljs-comment">// 得到文件描述符</span><br>  fileId = fileno(resource);<br><br>  <span class="hljs-keyword">if</span> (fstat(fileId, &amp;st) == <span class="hljs-number">-1</span>)<br>  &#123;<br>    inner_error(client_sock);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>  &#125;<br>  <span class="hljs-built_in">snprintf</span>(size, <span class="hljs-number">64</span>, <span class="hljs-string">&quot;Content-Length: %ld\r\n\r\n&quot;</span>, st.st_size);<br>  <span class="hljs-built_in">strcat</span>(buf, size);<br><br>  <span class="hljs-keyword">if</span> (debug)<br>    <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stdout</span>, <span class="hljs-string">&quot;header: %s\n&quot;</span>, buf);<br><br>  <span class="hljs-type">int</span> flag = send(client_sock, buf, <span class="hljs-built_in">strlen</span>(buf), <span class="hljs-number">0</span>);<br>  <span class="hljs-keyword">if</span> (flag &lt; <span class="hljs-number">0</span>)<br>  &#123;<br>    <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">&quot;send failed.data: %s, reason: %s\n&quot;</span>, buf, strerror(errno));<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>  &#125;<br><br>  <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">body</span><span class="hljs-params">(<span class="hljs-type">int</span> client_sock, FILE *resource)</span><br>&#123;<br>  <span class="hljs-type">char</span> buf[<span class="hljs-number">1024</span>];<br><br>  <span class="hljs-keyword">while</span> (fgets(buf, <span class="hljs-keyword">sizeof</span>(buf), resource) != <span class="hljs-literal">NULL</span>)<br>  &#123;<br>    <span class="hljs-type">int</span> len = send(client_sock, buf, <span class="hljs-built_in">strlen</span>(buf), <span class="hljs-number">0</span>);<br><br>    <span class="hljs-keyword">if</span> (len &lt; <span class="hljs-number">0</span>)<br>    &#123;<br>      <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">&quot;send body error. reason: %s\n&quot;</span>, strerror(errno));<br>      <span class="hljs-keyword">break</span>;<br>    &#125;<br><br>    <span class="hljs-comment">// if(debug) fprintf(stdout,&quot;%s&quot;,buf);</span><br>  &#125;<br>&#125;<br><br><span class="hljs-comment">// 返回值： -1 表示读取出错， 等于0 表示读到一个空行 ， 大于0 表示成功读取一行</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">get_line</span><span class="hljs-params">(<span class="hljs-type">int</span> client_sock, <span class="hljs-type">char</span> *buf, <span class="hljs-type">int</span> size)</span><br>&#123;<br>  <span class="hljs-type">int</span> count = <span class="hljs-number">0</span>;<br>  <span class="hljs-type">char</span> ch = <span class="hljs-string">&#x27;\0&#x27;</span>;<br>  <span class="hljs-type">int</span> len = <span class="hljs-number">0</span>;<br><br>  <span class="hljs-comment">// 一次读一个字符，直到读到换行符</span><br>  <span class="hljs-keyword">while</span> (count &lt; size - <span class="hljs-number">1</span> &amp;&amp; ch != <span class="hljs-string">&#x27;\n&#x27;</span>)<br>  &#123;<br>    <span class="hljs-comment">// rend 读取一个字符</span><br>    len = read(client_sock, &amp;ch, <span class="hljs-number">1</span>);<br><br>    <span class="hljs-keyword">if</span> (len == <span class="hljs-number">1</span>)<br>    &#123;<br>      <span class="hljs-comment">// 判断是否到行尾</span><br>      <span class="hljs-keyword">if</span> (ch == <span class="hljs-string">&#x27;\r&#x27;</span>)<br>      &#123;<br>        <span class="hljs-comment">// 跳出这次循环，直接执行下一次循环</span><br>        <span class="hljs-keyword">continue</span>;<br>      &#125;<br>      <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (ch == <span class="hljs-string">&#x27;\n&#x27;</span>)<br>      &#123;<br>        <span class="hljs-comment">// 如果读取到回车符，写入字符串结束符&#x27;\0&#x27;</span><br>        <span class="hljs-comment">// buf[count] = &#x27;\0&#x27;;</span><br>        <span class="hljs-keyword">break</span>;<br>      &#125;<br><br>      <span class="hljs-comment">// 读取处理一般字符</span><br>      buf[count] = ch;<br>      count++;<br>    &#125;<br>    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (len == <span class="hljs-number">-1</span>)<br>    &#123; <span class="hljs-comment">// 读取出错</span><br>      perror(<span class="hljs-string">&quot;read failed&quot;</span>);<br>      count = <span class="hljs-number">-1</span>;<br>      <span class="hljs-keyword">break</span>;<br>    &#125;<br>    <span class="hljs-keyword">else</span><br>    &#123; <span class="hljs-comment">// 客户端关闭 sock 连接，read 返回0</span><br>      <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">&quot;client close.\n&quot;</span>);<br>      count = <span class="hljs-number">-1</span>;<br>      <span class="hljs-keyword">break</span>;<br>    &#125;<br>  &#125;<br>  <span class="hljs-comment">// 在 buf 后面追加字符串结束符 &#x27;\0&#x27;</span><br>  <span class="hljs-keyword">if</span> (count &gt;= <span class="hljs-number">0</span>)<br>    buf[count] = <span class="hljs-string">&#x27;\0&#x27;</span>;<br>  <span class="hljs-keyword">return</span> count;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">not_found</span><span class="hljs-params">(<span class="hljs-type">int</span> client_sock)</span><br>&#123;<br>  <span class="hljs-type">const</span> <span class="hljs-type">char</span> *reply = <span class="hljs-string">&quot;HTTP/1.0 404 NOT FOUND\r\n\</span><br><span class="hljs-string">		Content-Type: text/html\r\n\</span><br><span class="hljs-string">		\r\n\</span><br><span class="hljs-string">		&lt;!DOCTYPE html&gt;\n\</span><br><span class="hljs-string">		&lt;html lang=\&quot;en\&quot;&gt;\n\</span><br><span class="hljs-string">		&lt;head&gt;\n\</span><br><span class="hljs-string">		  &lt;meta charset=\&quot;UTF-8\&quot;&gt;\n\</span><br><span class="hljs-string">		  &lt;meta name=\&quot;viewport\&quot; content=\&quot;width=device-width, initial-scale=1.0\&quot;&gt;\n\</span><br><span class="hljs-string">		  &lt;title&gt;NOT FOUND&lt;/title&gt;\n\</span><br><span class="hljs-string">		&lt;/head&gt;\n\</span><br><span class="hljs-string">		&lt;body&gt;\n\</span><br><span class="hljs-string">		  &lt;h1 style=\&quot;text-align:center\&quot;&gt;404 NOT FOUND&lt;/h1&gt;\n\</span><br><span class="hljs-string">		&lt;/body&gt;\n\</span><br><span class="hljs-string">		&lt;/html&gt;\n&quot;</span>;<br><br>  <span class="hljs-type">int</span> len = write(client_sock, reply, <span class="hljs-built_in">strlen</span>(reply));<br>  <span class="hljs-keyword">if</span> (debug)<br>    <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stdout</span>, reply);<br><br>  <span class="hljs-keyword">if</span> (len &lt;= <span class="hljs-number">0</span>)<br>  &#123;<br>    <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">&quot;sen reply failed.reason:%s\n&quot;</span>, strerror(errno));<br>  &#125;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">inner_error</span><span class="hljs-params">(<span class="hljs-type">int</span> client_sock)</span><br>&#123;<br>  <span class="hljs-type">const</span> <span class="hljs-type">char</span> *reply = <span class="hljs-string">&quot;HTTP/1.0 500 Internal Sever Error\r\n\</span><br><span class="hljs-string">		Content-Type: text/html\r\n\</span><br><span class="hljs-string">		\r\n\</span><br><span class="hljs-string">		&lt;!DOCTYPE html&gt;\n\</span><br><span class="hljs-string">		&lt;html lang=\&quot;en\&quot;&gt;\n\</span><br><span class="hljs-string">		&lt;head&gt;\n\</span><br><span class="hljs-string">		  &lt;meta charset=\&quot;UTF-8\&quot;&gt;\n\</span><br><span class="hljs-string">		  &lt;meta name=\&quot;viewport\&quot; content=\&quot;width=device-width, initial-scale=1.0\&quot;&gt;\n\</span><br><span class="hljs-string">		  &lt;title&gt;Inner Error&lt;/title&gt;\n\</span><br><span class="hljs-string">		&lt;/head&gt;\n\</span><br><span class="hljs-string">		&lt;body&gt;\n\</span><br><span class="hljs-string">		  &lt;h1 style=\&quot;text-align:center\&quot;&gt;服务器内部出错&lt;/h1&gt;\n\</span><br><span class="hljs-string">		&lt;/body&gt;\n\</span><br><span class="hljs-string">		&lt;/html&gt;\n&quot;</span>;<br><br>  <span class="hljs-type">int</span> len = write(client_sock, reply, <span class="hljs-built_in">strlen</span>(reply));<br>  <span class="hljs-keyword">if</span> (debug)<br>    <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stdout</span>, reply);<br><br>  <span class="hljs-keyword">if</span> (len &lt;= <span class="hljs-number">0</span>)<br>  &#123;<br>    <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">&quot;sen reply failed.reason:%s\n&quot;</span>, strerror(errno));<br>  &#125;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">unimplemented</span><span class="hljs-params">(<span class="hljs-type">int</span> client_sock)</span><br>&#123;<br>  <span class="hljs-type">const</span> <span class="hljs-type">char</span> *reply = <span class="hljs-string">&quot;HTTP/1.0 501 Method Not Implemented\r\n\</span><br><span class="hljs-string">		Content-Type: text/html\r\n\</span><br><span class="hljs-string">		\r\n\</span><br><span class="hljs-string">		&lt;!DOCTYPE html&gt;\n\</span><br><span class="hljs-string">		&lt;html lang=\&quot;en\&quot;&gt;\n\</span><br><span class="hljs-string">		&lt;head&gt;\n\</span><br><span class="hljs-string">		  &lt;meta charset=\&quot;UTF-8\&quot;&gt;\n\</span><br><span class="hljs-string">		  &lt;meta name=\&quot;viewport\&quot; content=\&quot;width=device-width, initial-scale=1.0\&quot;&gt;\n\</span><br><span class="hljs-string">		  &lt;title&gt;Method Not Implemented&lt;/title&gt;\n\</span><br><span class="hljs-string">		&lt;/head&gt;\n\</span><br><span class="hljs-string">		&lt;body&gt;\n\</span><br><span class="hljs-string">		  &lt;h1 style=\&quot;text-align:center\&quot;&gt;HTTP request method not supported&lt;/h1&gt;\n\</span><br><span class="hljs-string">		&lt;/body&gt;\n\</span><br><span class="hljs-string">		&lt;/html&gt;\n&quot;</span>;<br><br>  <span class="hljs-type">int</span> len = write(client_sock, reply, <span class="hljs-built_in">strlen</span>(reply));<br>  <span class="hljs-keyword">if</span> (debug)<br>    <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stdout</span>, reply);<br><br>  <span class="hljs-keyword">if</span> (len &lt;= <span class="hljs-number">0</span>)<br>  &#123;<br>    <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">&quot;sen reply failed.reason:%s\n&quot;</span>, strerror(errno));<br>  &#125;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">bad_request</span><span class="hljs-params">(<span class="hljs-type">int</span> client_sock)</span><br>&#123;<br><br>  <span class="hljs-type">const</span> <span class="hljs-type">char</span> *reply = <span class="hljs-string">&quot;HTTP/1.0 400 BAD REQUEST\r\n\</span><br><span class="hljs-string">		Content-Type: text/html\r\n\</span><br><span class="hljs-string">		\r\n\</span><br><span class="hljs-string">		&lt;!DOCTYPE html&gt;\n\</span><br><span class="hljs-string">		&lt;html lang=\&quot;en\&quot;&gt;\n\</span><br><span class="hljs-string">		&lt;head&gt;\n\</span><br><span class="hljs-string">		  &lt;meta charset=\&quot;UTF-8\&quot;&gt;\n\</span><br><span class="hljs-string">		  &lt;meta name=\&quot;viewport\&quot; content=\&quot;width=device-width, initial-scale=1.0\&quot;&gt;\n\</span><br><span class="hljs-string">		  &lt;title&gt;BAD REQUEST&lt;/title&gt;\n\</span><br><span class="hljs-string">		&lt;/head&gt;\n\</span><br><span class="hljs-string">		&lt;body&gt;\n\</span><br><span class="hljs-string">		  &lt;h1 style=\&quot;text-align:center\&quot;&gt;Your browser sent a bad request&lt;/h1&gt;\n\</span><br><span class="hljs-string">		&lt;/body&gt;\n\</span><br><span class="hljs-string">		&lt;/html&gt;\n&quot;</span>;<br><br>  <span class="hljs-type">int</span> len = write(client_sock, reply, <span class="hljs-built_in">strlen</span>(reply));<br>  <span class="hljs-keyword">if</span> (debug)<br>    <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stdout</span>, reply);<br><br>  <span class="hljs-keyword">if</span> (len &lt;= <span class="hljs-number">0</span>)<br>  &#123;<br>    <span class="hljs-built_in">fprintf</span>(<span class="hljs-built_in">stderr</span>, <span class="hljs-string">&quot;sen reply failed.reason:%s\n&quot;</span>, strerror(errno));<br>  &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h4 id="handle-http-h"><a href="#handle-http-h" class="headerlink" title="handle_http.h"></a>handle_http.h</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;unistd.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/types.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/socket.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;arpa/inet.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;ctype.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;errno.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;sys/stat.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;pthread.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> debug 1</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SERVER_PORT 80</span><br><span class="hljs-comment">// #define IP &quot;0.0.0.0&quot;</span><br><br><span class="hljs-type">void</span> *<span class="hljs-title function_">do_http_request</span><span class="hljs-params">(<span class="hljs-type">void</span> *pclient_sock)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">do_http_response</span><span class="hljs-params">(<span class="hljs-type">int</span> client_sock, <span class="hljs-type">const</span> <span class="hljs-type">char</span> *path)</span>;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">get_line</span><span class="hljs-params">(<span class="hljs-type">int</span> client_sock, <span class="hljs-type">char</span> *buf, <span class="hljs-type">int</span> size)</span>;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">header</span><span class="hljs-params">(<span class="hljs-type">int</span> client_sock, FILE *resource)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">body</span><span class="hljs-params">(<span class="hljs-type">int</span> client_sock, FILE *resource)</span>;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">inner_error</span><span class="hljs-params">(<span class="hljs-type">int</span> client_sock)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">unimplemented</span><span class="hljs-params">(<span class="hljs-type">int</span> client_sock)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">not_found</span><span class="hljs-params">(<span class="hljs-type">int</span> client_sock)</span>;<br><span class="hljs-type">void</span> <span class="hljs-title function_">bad_request</span><span class="hljs-params">(<span class="hljs-type">int</span> client_sock)</span>;<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Linux/" class="category-chain-item">Linux</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Linux/">#Linux</a>
+      
+        <a href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/">#服务器</a>
+      
+        <a href="/tags/Socket/">#Socket</a>
+      
+        <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">#网络编程</a>
+      
+        <a href="/tags/HTTP/">#HTTP</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/04/12/Socket%E7%BC%96%E7%A8%8B%E5%92%8C%E7%BD%91%E7%BB%9C%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%BC%80%E5%8F%91/" title="Socket编程和网络服务器的开发">
+                        <span class="hidden-mobile">Socket编程和网络服务器的开发</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"KbBA0OepAHi9AzJfVnEVXTWV-gzGzoHsz","appKey":"gm95QX5JO6oIGCpRa0tCx9SN","path":"window.location.pathname","placeholder":"留言","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":true,"serverURLs":"https://kbba0oep.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
