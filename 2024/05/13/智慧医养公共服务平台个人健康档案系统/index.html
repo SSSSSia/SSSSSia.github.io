@@ -1,0 +1,653 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid1.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="SSSSSia">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="第一个Java Web开发项目，项目记录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="智慧医养公共服务平台个人健康档案系统">
+<meta property="og:url" content="http://example.com/2024/05/13/%E6%99%BA%E6%85%A7%E5%8C%BB%E5%85%BB%E5%85%AC%E5%85%B1%E6%9C%8D%E5%8A%A1%E5%B9%B3%E5%8F%B0%E4%B8%AA%E4%BA%BA%E5%81%A5%E5%BA%B7%E6%A1%A3%E6%A1%88%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="SSSSSia">
+<meta property="og:description" content="第一个Java Web开发项目，项目记录">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/img/index_img15.jpg">
+<meta property="article:published_time" content="2024-05-13T10:07:29.000Z">
+<meta property="article:modified_time" content="2024-05-13T10:23:00.607Z">
+<meta property="article:author" content="SSSSSia">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="后端">
+<meta property="article:tag" content="前端">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/img/index_img15.jpg">
+  
+  
+  
+  <title>智慧医养公共服务平台个人健康档案系统 - SSSSSia</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"KbBA0OepAHi9AzJfVnEVXTWV-gzGzoHsz","app_key":"gm95QX5JO6oIGCpRa0tCx9SN","server_url":"https://kbba0oep.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 95vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>SSSSSia</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                主页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner_img14.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="智慧医养公共服务平台个人健康档案系统"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-05-13 18:07" pubdate>
+          May 13, 2024 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.4k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          20 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> views
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+        <div class="scroll-down-bar">
+          <i class="iconfont icon-arrowdown"></i>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">智慧医养公共服务平台个人健康档案系统</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="智慧医养公共服务平台个人健康档案系统"><a href="#智慧医养公共服务平台个人健康档案系统" class="headerlink" title="智慧医养公共服务平台个人健康档案系统"></a>智慧医养公共服务平台个人健康档案系统</h1><h2 id="1-项目背景"><a href="#1-项目背景" class="headerlink" title="1.项目背景"></a>1.项目背景</h2><p>​		随着我国老龄化进程的加快，老年人群的医疗和养护需求日益增长，医养结合已成为社会发展的必然趋势，该系统旨在为老年人提供全面的健康管理服务，包括健康档案的建立、更新和维护，健康数据的采集、分析和应用，健康预警和提供医生专家库等。<br>​		系统分成七大模块：登录注册、个人健康档案、个人健康报告、健康预警、医生专家库、个人积分、个人账户管理。</p>
+<h2 id="2-需求分析"><a href="#2-需求分析" class="headerlink" title="2.需求分析"></a>2.需求分析</h2><p>​		因为项目的功能其实并没有多少，所以在分析的时候有意在增加项目的复杂度，分了三种角色，普通用户、医生用户和管理员。<br>​		普通用户可以对健康档案进行查看、增加、删除、修改、查找，对健康报告进行查找和删除，同时可以在健康报告界面查看健康预警，对医生专家库进行查看、查找和选择医生进行咨询上传自己的健康档案并消耗积分，对个人账户可以进行查看和修改，同时在个人账户管理界面可以每日签到获得积分。<br>​		医生用户可以接收用户发来的健康档案，并查看然后点击生成对应的健康报告，生成健康报告后，相应的用户传上来的档案也会在医生账户中删除，同时普通用户就可以在自己的健康报告界面查看该医生生成的健康报告，同时可以点击查看报告对应的健康档案；医生用户也可以修改自己的账户信息（除了姓名以外），同时，医生账户还增加了一个医生详细信息界面，包括医生的科室、职称等信息，该信息医生也可以自主修改。<br>​		管理员可以添加和移除每周的值班医生，同时可以管理医生账户，包括增加医生账户和删除医生账户。</p>
+<h2 id="3-效果展示-部分"><a href="#3-效果展示-部分" class="headerlink" title="3.效果展示(部分)"></a>3.效果展示(部分)</h2><h4 id="登录前主页面"><a href="#登录前主页面" class="headerlink" title="登录前主页面"></a>登录前主页面</h4><p><img src="/img/%E6%99%BA%E6%85%A7%E5%8C%BB%E5%85%BB%E5%85%AC%E5%85%B1%E6%9C%8D%E5%8A%A1%E5%B9%B3%E5%8F%B0%E4%B8%AA%E4%BA%BA%E5%81%A5%E5%BA%B7%E6%A1%A3%E6%A1%88%E7%B3%BB%E7%BB%9F/index.jpg" srcset="/img/loading.gif" lazyload alt="index.html"></p>
+<h4 id="登录界面"><a href="#登录界面" class="headerlink" title="登录界面"></a>登录界面</h4><p><img src="/img/%E6%99%BA%E6%85%A7%E5%8C%BB%E5%85%BB%E5%85%AC%E5%85%B1%E6%9C%8D%E5%8A%A1%E5%B9%B3%E5%8F%B0%E4%B8%AA%E4%BA%BA%E5%81%A5%E5%BA%B7%E6%A1%A3%E6%A1%88%E7%B3%BB%E7%BB%9F/login.jpg" srcset="/img/loading.gif" lazyload alt="login.html"></p>
+<h4 id="登陆后主界面-普通用户、医生"><a href="#登陆后主界面-普通用户、医生" class="headerlink" title="登陆后主界面(普通用户、医生)"></a>登陆后主界面(普通用户、医生)</h4><p><img src="/img/%E6%99%BA%E6%85%A7%E5%8C%BB%E5%85%BB%E5%85%AC%E5%85%B1%E6%9C%8D%E5%8A%A1%E5%B9%B3%E5%8F%B0%E4%B8%AA%E4%BA%BA%E5%81%A5%E5%BA%B7%E6%A1%A3%E6%A1%88%E7%B3%BB%E7%BB%9F/main.jpg" srcset="/img/loading.gif" lazyload alt="main.html"></p>
+<h4 id="个人健康档案界面-普通用户"><a href="#个人健康档案界面-普通用户" class="headerlink" title="个人健康档案界面(普通用户)"></a>个人健康档案界面(普通用户)</h4><p><img src="/img/%E6%99%BA%E6%85%A7%E5%8C%BB%E5%85%BB%E5%85%AC%E5%85%B1%E6%9C%8D%E5%8A%A1%E5%B9%B3%E5%8F%B0%E4%B8%AA%E4%BA%BA%E5%81%A5%E5%BA%B7%E6%A1%A3%E6%A1%88%E7%B3%BB%E7%BB%9F/file.jpg" srcset="/img/loading.gif" lazyload alt="file.html"></p>
+<h4 id="个人健康报告界面-普通用户"><a href="#个人健康报告界面-普通用户" class="headerlink" title="个人健康报告界面(普通用户)"></a>个人健康报告界面(普通用户)</h4><p><img src="/img/%E6%99%BA%E6%85%A7%E5%8C%BB%E5%85%BB%E5%85%AC%E5%85%B1%E6%9C%8D%E5%8A%A1%E5%B9%B3%E5%8F%B0%E4%B8%AA%E4%BA%BA%E5%81%A5%E5%BA%B7%E6%A1%A3%E6%A1%88%E7%B3%BB%E7%BB%9F/report.jpg" srcset="/img/loading.gif" lazyload alt="report.html"></p>
+<h4 id="医生专家库界面-普通用户"><a href="#医生专家库界面-普通用户" class="headerlink" title="医生专家库界面(普通用户)"></a>医生专家库界面(普通用户)</h4><p><img src="/img/%E6%99%BA%E6%85%A7%E5%8C%BB%E5%85%BB%E5%85%AC%E5%85%B1%E6%9C%8D%E5%8A%A1%E5%B9%B3%E5%8F%B0%E4%B8%AA%E4%BA%BA%E5%81%A5%E5%BA%B7%E6%A1%A3%E6%A1%88%E7%B3%BB%E7%BB%9F/doctor.jpg" srcset="/img/loading.gif" lazyload alt="doctor.html"></p>
+<h4 id="个人账户管理界面-普通用户"><a href="#个人账户管理界面-普通用户" class="headerlink" title="个人账户管理界面(普通用户)"></a>个人账户管理界面(普通用户)</h4><p><img src="/img/%E6%99%BA%E6%85%A7%E5%8C%BB%E5%85%BB%E5%85%AC%E5%85%B1%E6%9C%8D%E5%8A%A1%E5%B9%B3%E5%8F%B0%E4%B8%AA%E4%BA%BA%E5%81%A5%E5%BA%B7%E6%A1%A3%E6%A1%88%E7%B3%BB%E7%BB%9F/account.jpg" srcset="/img/loading.gif" lazyload alt="account.html"></p>
+<h2 id="项目日记"><a href="#项目日记" class="headerlink" title="项目日记"></a>项目日记</h2><p>​		为什么要写个与项目无关的内容，因为真的忍不住。被发配到某教育培训机构，用了不到两周的时间，突击了 Java web开发的大部分内容，包括servlet、jsp、jQuery、Spring、SpringMVC、SpringBoot、MyBatis、Mybatis-Plus等等，纯被当牛马在学，要吐槽的点太多了，不得不说，这里的老师很认真，但教学水平真的有待提高，而且没有一定基础很难学会，完全不如自学。这里的教学也是跳着讲，挑着讲，会教你好多在我看来没用的东西，好多关键内容也是直接给你跳过，不会让你掌握这个东西原理是什么，可能要达到的效果就是你能速成下来，会用就行，老师教东西也是直接带你操作一遍。<br>​		在这学习确实有点难受，可能我个人的转行意愿比较强烈（大学浑浑噩噩，没有任何规划），但是为了完成这里和学校的任务，又不得不花费很多精力去学习后端的知识，因为后面学的差不多了就开始分组做项目，当然也是和身边熟悉的舍友和同学组队，但是自己又清楚他们的水平，自己不学点东西，到时候项目纯没法交差。按照这里的要求，这个项目还分了好多阶段，应该包含了软件开发流程的全过程，不得不说，规定这个开发流程确实很好，但是要写好多没用的文档，而且后面实施的话，也没完全按照开发流程走，项目执行的时候确实很乱。<br>​		刚开始项目分配任务的时候，我就在想，直接把前后端代码的任务全给我（之前在学校自学过前端三件套HTML、CSS、JavaScript），其他的什么需求分析、数据库设计、系统设计、以及各种文档还有其他乱起八糟的任务全部丢给他们，和其中两个好哥们商量的时候，他们觉得全让我干了不得把我累死（感动），就让我正常分配，大不了到时候他们用GPT生成，所以后面就按照项目功能分了5个人的量，他们也给我留了登录注册和主界面功能的实现，每个人负责自己功能的需求分析、前后端代码、数据库表设计等等，前面的需求分析就初露端倪，哥几个是能水就水，初期小组互评的时候真是水到家了，整个小组分析出来的功能和别的组一个人的量差不多，那老师也看不下去，只能说我们内容太少了，希望后续能扩展一点，没办法只能给老师画饼，后续学到新东西再继续扩展。在写代码阶段开始之前，来了个新老师教了AxureRP软件来设计界面原型，后来发现这个软件可以直接生成本地的html文件，所以项目刚开始的时候，就先将就着用它生成的html文件，但是这堆文件非常乱，要引入很多不知名的js和css文件，不同页面的相同类型的元素生成的格式又不一样，总之生成的这些前端代码很不靠谱，但是没办法，哥几个是真不会写，先将就着用。后来快要到五一了，五一假期来的第二天就要项目展示，哥几个迟迟没进展，就算到时候急急忙发给我，东西又没法整合，没办法，我只能放弃幻想，开始自己写全部代码。<br>​		之前生成的页面看着很劣质，所以我就先花了两天时间，用那些组件库，找模板，把主页面和其他功能的主要页面的模板和框架先弄了出来，后面要加新元素就不用那么大的改动。因为之前哥几个的需求分析很水，而且各功能模块没法整合，像是每个人自己独立的一个功能，没办法，我只能自己重新分析，因为情况比较特殊，我只能简单分析后直接写前端页面，这样如果稍微需求有改动的话，前端要改的东西就很多，个人认为项目的前端还是比较麻烦的，因为我还没学那些框架，只能用HTML、CSS、JavaScript三件套来写（而且一些组件库的组件也比较好看），JS用axios发请求也比较麻烦，刚开始就因为请求头和Cookie的携带问题卡了好久。五一放5天，每天下午抽出一些时间写代码，五一结束还有一天时间，从早上9点写到晚上快9点终于写完，第二天项目展示也是匆匆忙忙，上去狠狠地被老师拷打，点了各种问题，果然还是需求没分析好（再次点评一下这里的老师，确实很认真、很负责，但教学水平确实不太行），后面就是上课空闲时间，按照被拷打的内容，优化项目，需求分析改了改，后端接口加了加，前端界面改了改，现在项目的完成度还是比较可以，不知道到时候展示的时候会不会再次被狠狠地拷打。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E9%A1%B9%E7%9B%AE%E8%AE%B0%E5%BD%95/" class="category-chain-item">项目记录</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Java/">#Java</a>
+      
+        <a href="/tags/%E5%90%8E%E7%AB%AF/">#后端</a>
+      
+        <a href="/tags/%E5%89%8D%E7%AB%AF/">#前端</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/04/18/Socket%E7%BC%96%E7%A8%8B%E5%AE%9E%E7%8E%B0%E5%B9%B6%E5%8F%91HTTP%E6%9C%8D%E5%8A%A1%E5%99%A8/" title="Socket编程实现并发HTTP服务器">
+                        <span class="hidden-mobile">Socket编程实现并发HTTP服务器</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments" lazyload>
+    
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://lib.baomitu.com/valine/1.5.1/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"KbBA0OepAHi9AzJfVnEVXTWV-gzGzoHsz","appKey":"gm95QX5JO6oIGCpRa0tCx9SN","path":"window.location.pathname","placeholder":"留言","avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":true,"serverURLs":"https://kbba0oep.lc-cn-n1-shared.com","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          var imgSelector = '#valine .vcontent img:not(.vemoji)';
+          Fluid.plugins.imageCaption(imgSelector);
+          Fluid.plugins.fancyBox(imgSelector);
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;Table of Contents</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
